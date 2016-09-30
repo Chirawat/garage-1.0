@@ -163,47 +163,72 @@ class QuotationController extends Controller
             $quotation = new Quotation();
 
             //$quotation->quotation_id = 
-//             $quotation->quotation_date = 
-//             $quotation->claim_no = 
-           
-           
-           //$customer = Customer::find()->where(['fullname' => $data["quotation_info"]["customerFullName"]])->one();
-            return $data["quotation_info"];
-            return $customer;
-           
-            $quotation->EID = Yii::$app->user->identity->getId();
-    
 
+            // Fill up CID
+            $customer = Customer::find()->where(['fullname' => $data["quotation_info"]["customerFullName"]])->one();
+            $quotation->CID = $customer->CID;
 
+            // Fill up VID
+            $viecle = Viecle::find()->where(['plate_no' => $data["quotation_info"]["vieclePlateNo"]])->one();
+            $quotation->VID = $viecle->VID;
 
+            $quotation->claim_no = $data["quotation_info"]["claimNo"];
+
+            // Fill up EID
+            $quotation->Employee = Yii::$app->user->identity->getId();
+
+            $quotation->quotation_date = date("Y-m-d");
+           
+           // Save Model
+            if( $quotation->validate() ){
+                $ret = $quotation->save();
+            }
+           else{
+               return $quotation->errors;
+           }
+
+           
+           $QID = Quotation::find()->select(['QID'])->orderBy(['QID' => SORT_DESC])->one()["QID"];
+           
             // Description data
             ///////////////////////////////////////////////////////////////////////////////
 
             // Maintenance
-            for($i = 0; $i < sizeOf($data["maintenance_list"]); $i++){
-                $description = new Description();
+            if(!empty($data["maintenance_list"])){
+                for($i = 0; $i < sizeOf($data["maintenance_list"]); $i++){
+                    $description = new Description();
 
-                $description->QID = 23;
-                $description->row = 1;
-                $description->description = $data["maintenance_list"][$i]["list"];
-                $description->type = "MAINTENANCE";
-                $description->price = $data["maintenance_list"][$i]["price"];
+                    $description->QID = $QID;
+                    $description->row = 1;
+                    $description->description = $data["maintenance_list"][$i]["list"];
+                    $description->type = "MAINTENANCE";
+                    $description->price = $data["maintenance_list"][$i]["price"];
 
-                $ret = $description->save();
+                    if( $description->validate() )
+                        $ret = $description->save();
+                    else
+                        return $description->errors;
+                }
             }
 
             // Part
-            for($i = 0; $i < sizeOf($data["part_list"]); $i++){
-                $description = new Description();
+            if(!empty($data["part_list"])){
+                for($i = 0; $i < sizeOf($data["part_list"]); $i++){
+                    $description = new Description();
 
-                $description->QID = 23;
-                $description->row = 1;
-                $description->description = $data["part_list"][$i]["list"];
-                $description->type = "PART";
-                $description->price = $data["part_list"][$i]["price"];
+                    $description->QID = $QID;
+                    $description->row = 1;
+                    $description->description = $data["part_list"][$i]["list"];
+                    $description->type = "PART";
+                    $description->price = $data["part_list"][$i]["price"];
 
-                $ret = $description->save();
+                    if( $description->validate() )
+                        $ret = $description->save();
+                    else
+                        return $description->errors;
+                }
             }
+            
 
             return $ret;
        }

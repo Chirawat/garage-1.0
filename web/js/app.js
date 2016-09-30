@@ -1,7 +1,7 @@
 $(document).ready(function () {
     var maintenance = [];
     var part = [];
-    var quotation_info = [];
+    //var quotation_info = [];
     var id = 1;
     var list = [];
 
@@ -187,7 +187,7 @@ $(document).ready(function () {
      $("#btn-save").on("click", function(event, ui){
          if(maintenance.length != 0 || part.length != 0){
             // get quotation info
-            quotation_info.push({
+            quotation_info = {
                 // Claim number
                 claimNo: $("#quotation-claim_no").val(),
                 
@@ -196,7 +196,7 @@ $(document).ready(function () {
 
                 // viecle
                 vieclePlateNo: $("#viecle-plate_no").val(),
-            });
+            };
 
 
             $.ajax({
@@ -210,11 +210,10 @@ $(document).ready(function () {
                  },
                  success: function(data){
                      console.log(data);
+                     $("#modal-save").modal('show');
+                     $("#btn-save").addClass("disabled");
                  }
              });
-         
-             // show modal
-             $("#modal-save").modal('show');
          }
 
      });

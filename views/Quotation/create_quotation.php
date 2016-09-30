@@ -21,11 +21,11 @@ $url = Url::to(['customer-list']);
 
 Modal::begin([
     'id' => 'modal-save',
-    'header' => '<h2>Hello world</h2>',
+    'header' => '<h4>Hello world</h4>',
     //'toggleButton' => ['label' => 'click me'],
 ]);
 
-echo 'Say hello...';
+echo 'บันทึกข้อมูลเรียบร้อย';
 
 Modal::end();
 ?>
