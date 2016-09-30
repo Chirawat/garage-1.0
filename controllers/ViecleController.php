@@ -129,7 +129,7 @@ class ViecleController extends Controller
         }
     }
 
-    public function actionGetPlateId($term = null){
+    public function actionPlateNoList($term = null){
 //         if( Yii::$app->request->isAjax){    
             if (!is_null($term)) {
                 \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -138,7 +138,7 @@ class ViecleController extends Controller
 
                 $viecles = $query->select(["plate_no AS value"])->from('viecle')->where(['like', 'plate_no', $term])->all();
 
-                return $term;
+                return $viecles;
             }
 //         }
     }

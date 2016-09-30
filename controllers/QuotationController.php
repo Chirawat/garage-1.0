@@ -95,11 +95,10 @@ class QuotationController extends Controller
             return $this->redirect(['view', 'id' => $model->QID]);
         } else {
             return $this->render('create', [
-                'model' => $model,
+                'model' => $model,          // quotation
                 'customerModel' => $customerModel,
                 'viecleModel' => $viecleModel,
-                'insuranceCompanyModel' => $insuranceCompanyModel,
-                'quotationId' => $quotationId,
+                //'quotationId' => $quotationId,
             ]);
         }
     }
@@ -166,6 +165,12 @@ class QuotationController extends Controller
             //$quotation->quotation_id = 
 //             $quotation->quotation_date = 
 //             $quotation->claim_no = 
+           
+           
+           //$customer = Customer::find()->where(['fullname' => $data["quotation_info"]["customerFullName"]])->one();
+            return $data["quotation_info"];
+            return $customer;
+           
             $quotation->EID = Yii::$app->user->identity->getId();
     
 

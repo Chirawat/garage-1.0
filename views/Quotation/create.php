@@ -18,8 +18,8 @@ use yii\helpers\Html;
         'model' => $model,                      // quotation table
         'customerModel' => $customerModel,
         'viecleModel' => $viecleModel,
-        'insuranceCompanyModel' => $insuranceCompanyModel,
-        'quotationId' => $quotationId,
+        //'insuranceCompanyModel' => $insuranceCompanyModel,
+        //'quotationId' => $quotationId,
     ]) ?>
 
 </div>
