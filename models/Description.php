@@ -12,7 +12,7 @@ use Yii;
  * @property integer $row
  * @property string $description
  * @property string $type
- * @property integer $price
+ * @property double $price
  *
  * @property Quotation $q
  */
@@ -33,8 +33,9 @@ class Description extends \yii\db\ActiveRecord
     {
         return [
             [['QID'], 'required'],
-            [['QID', 'row', 'price'], 'integer'],
+            [['QID', 'row'], 'integer'],
             [['description', 'type'], 'string'],
+            [['price'], 'number'],
             [['QID'], 'exist', 'skipOnError' => true, 'targetClass' => Quotation::className(), 'targetAttribute' => ['QID' => 'QID']],
         ];
     }

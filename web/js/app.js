@@ -188,6 +188,7 @@ $(document).ready(function () {
          if(maintenance.length != 0 || part.length != 0){
             // get quotation info
             quotation_info = {
+                quotationId: $("#quotationId").val(),
                 // Claim number
                 claimNo: $("#quotation-claim_no").val(),
                 

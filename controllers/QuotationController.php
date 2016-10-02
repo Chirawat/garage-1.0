@@ -14,6 +14,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\Query;
 use yii\helpers\Json;
+use kartik\mpdf\Pdf;
 /**
  * QuotationController implements the CRUD actions for Quotation model.
  */
@@ -54,10 +55,49 @@ class QuotationController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView($quotation_id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
+        $qid = Quotation::find()->where(['quotation_id' => $quotation_id])->one()['QID'];
+        
+        // Quotation
+        $model = Quotation::find()->where(['QID' => $qid])->one();
+        
+        // Customer
+        $customerModel = Customer::find()->where(['CID' => $model->CID])->one();
+        
+        // Viecle
+        $viecleModel = Viecle::find()->where(['VID' => $model->VID])->one();
+        
+        // Description
+        $query = Description::find()->where(['QID' => $model->QID, 'type' => 'MAINTENANCE']);
+        $maintenanceDescriptionModel = $query->all();
+        $sumMaintenance = $query->sum('price');
+        
+        $query = Description::find()->where(['QID' => $model->QID, 'type' => 'PART']);
+        $partDescriptionModel = $query->all();
+        $sumPart = $query->sum('price');
+        
+        $numRow = 0;
+        if(sizeof($maintenanceDescriptionModel) > sizeof($partDescriptionModel))
+            $numRow = sizeof($maintenanceDescriptionModel);
+        else
+            $numRow = sizeof($partDescriptionModel);
+            
+        // render
+        $detailView = $this->renderPartial('view_quotation',[
+            'maintenanceDescriptionModel' => $maintenanceDescriptionModel,
+            'sumMaintenance' => $sumMaintenance,
+            'partDescriptionModel' => $partDescriptionModel,
+            'sumPart' => $sumPart,
+            'numRow' => $numRow,
+        ]);
+        
+        return $this->render('header_quotation', [
+            'model' => $model,          // quotation
+            'quotationId' => null,
+            'customerModel' => $customerModel,
+            'viecleModel' => $viecleModel,
+            'detailView'  => $detailView,
         ]);
     }
 
@@ -83,22 +123,21 @@ class QuotationController extends Controller
         
         $viecleModel = new Viecle();
         
-        $insuranceCompanyModel = new InsuranceCompany();
-
-        // Query last record of 'Quotation'
-        // ex. 2/2559
-        $lastQID = Quotation::find()->select('quotation_id')->orderBy(['QID' => SORT_DESC])->one()["quotation_id"];
-        $quotationId = (int)$lastQID + 1;
-        $quotationId = (string)$quotationId . "/2559";
-
+        // Quotation Id    
+        $year = date('Y');
+        $count = Quotation::find()->where(["EXTRACT(YEAR FROM quotation_date)" => $year])->count();
+        $quotationId = ($count + 1) . "/" . ($year + 543);
+       
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->QID]);
         } else {
-            return $this->render('create', [
+            $detailView = $this->renderPartial('create_quotation');
+            return $this->render('header_quotation', [
                 'model' => $model,          // quotation
+                'quotationId' => $quotationId,
                 'customerModel' => $customerModel,
                 'viecleModel' => $viecleModel,
-                //'quotationId' => $quotationId,
+                'detailView'  => $detailView,
             ]);
         }
     }
@@ -162,8 +201,6 @@ class QuotationController extends Controller
             ///////////////////////////////////////////////////////////////////////////////
             $quotation = new Quotation();
 
-            //$quotation->quotation_id = 
-
             // Fill up CID
             $customer = Customer::find()->where(['fullname' => $data["quotation_info"]["customerFullName"]])->one();
             $quotation->CID = $customer->CID;
@@ -178,6 +215,8 @@ class QuotationController extends Controller
             $quotation->Employee = Yii::$app->user->identity->getId();
 
             $quotation->quotation_date = date("Y-m-d");
+            $quotation->quotation_id = $data["quotation_info"]["quotationId"];;
+           
            
            // Save Model
             if( $quotation->validate() ){
@@ -233,6 +272,84 @@ class QuotationController extends Controller
             return $ret;
        }
    }
+    
+    public function actionReport($quotation_id) {
+        $qid = Quotation::find()->where(['quotation_id' => $quotation_id])->one()['QID'];
+        
+        // Quotation
+        $model = Quotation::find()->where(['QID' => $qid])->one();
+        
+        // Customer
+        $customerModel = Customer::find()->where(['CID' => $model->CID])->one();
+        
+        // Viecle
+        $viecleModel = Viecle::find()->where(['VID' => $model->VID])->one();
+        
+        // Description
+        $query = Description::find()->where(['QID' => $model->QID, 'type' => 'MAINTENANCE']);
+        $maintenanceDescriptionModel = $query->all();
+        $sumMaintenance = $query->sum('price');
+        
+        $query = Description::find()->where(['QID' => $model->QID, 'type' => 'PART']);
+        $partDescriptionModel = $query->all();
+        $sumPart = $query->sum('price');
+        
+        $numRow = 0;
+        if(sizeof($maintenanceDescriptionModel) > sizeof($partDescriptionModel))
+            $numRow = sizeof($maintenanceDescriptionModel);
+        else
+            $numRow = sizeof($partDescriptionModel);
+        
+        
+
+        //////////////// REPORT PROCEDURE ////////////////////////////////////////
+        $content = $this->renderPartial('report',[
+            'model' => $model,
+            'customerModel' => $customerModel,
+            'viecleModel' => $viecleModel,
+            
+            'maintenanceDescriptionModel' => $maintenanceDescriptionModel,
+            'sumMaintenance' => $sumMaintenance,
+            'partDescriptionModel' => $partDescriptionModel,
+            'sumPart' => $sumPart,
+            'numRow' => $numRow,
+        ]);
+
+        // setup kartik\mpdf\Pdf component
+        $pdf = new Pdf([
+        // set to use core fonts only
+        'mode' => Pdf::MODE_UTF8, 
+        // A4 paper format
+        'format' => Pdf::FORMAT_A4, 
+        // portrait orientation
+        'orientation' => Pdf::ORIENT_PORTRAIT, 
+        // stream to browser inline
+        'destination' => Pdf::DEST_BROWSER, 
+        // your html content input
+        'content' => $content,  
+        // format content from your own css file if needed or use the
+        // enhanced bootstrap css built by Krajee for mPDF formatting 
+        'cssFile' => '@app/web/css/pdf.css',
+        // any css to be embedded if required
+        //        'cssInline' => '.kv-heading-1{font-size:18px}', 
+        // set mPDF properties on the fly
+        'options' => ['title' => 'ใบเสนอราคา'],
+        // call mPDF methods on the fly
+        'methods' => [ 
+            //'SetHeader'=>['Krajee Report Header'], 
+            'SetFooter'=>['หน้า {PAGENO} / {nb}'],
+            ]
+        ]);
+
+        $pdf->configure(array(
+            'defaultfooterline' => '0', 
+            'defaultfooterfontstyle' => 'R',
+            'defaultfooterfontsize' => '10',
+        ));
+
+        // return the pdf output as per the destination setting
+        return $pdf->render(); 
+    }
 
    
     public function actionTest(){

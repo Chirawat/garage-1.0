@@ -19,7 +19,7 @@ use yii\helpers\Html;
         'customerModel' => $customerModel,
         'viecleModel' => $viecleModel,
         //'insuranceCompanyModel' => $insuranceCompanyModel,
-        //'quotationId' => $quotationId,
+        'quotationId' => $quotationId,
     ]) ?>
 
 </div>

@@ -125,11 +125,11 @@ class SiteController extends Controller
     }
     
     public function actionReport() {
-    // get your HTML raw content without any layouts or scripts
-    $content = $this->renderPartial('report');
-    
-    // setup kartik\mpdf\Pdf component
-    $pdf = new Pdf([
+        // get your HTML raw content without any layouts or scripts
+        $content = $this->renderPartial('report');
+
+        // setup kartik\mpdf\Pdf component
+        $pdf = new Pdf([
         // set to use core fonts only
         'mode' => Pdf::MODE_UTF8, 
         // A4 paper format
@@ -144,24 +144,24 @@ class SiteController extends Controller
         // enhanced bootstrap css built by Krajee for mPDF formatting 
         'cssFile' => '@app/web/css/pdf.css',
         // any css to be embedded if required
-//        'cssInline' => '.kv-heading-1{font-size:18px}', 
-         // set mPDF properties on the fly
+        //        'cssInline' => '.kv-heading-1{font-size:18px}', 
+        // set mPDF properties on the fly
         'options' => ['title' => 'ใบเสนอราคา'],
-         // call mPDF methods on the fly
+        // call mPDF methods on the fly
         'methods' => [ 
             //'SetHeader'=>['Krajee Report Header'], 
             'SetFooter'=>['หน้า {PAGENO} / {nb}'],
-        ]
-    ]);
-    
-    $pdf->configure(array(
-        'defaultfooterline' => '0', 
-        'defaultfooterfontstyle' => 'R',
-        'defaultfooterfontsize' => '10',
-    ));
-        
-    // return the pdf output as per the destination setting
-    return $pdf->render(); 
-}
+            ]
+        ]);
+
+        $pdf->configure(array(
+            'defaultfooterline' => '0', 
+            'defaultfooterfontstyle' => 'R',
+            'defaultfooterfontsize' => '10',
+        ));
+
+        // return the pdf output as per the destination setting
+        return $pdf->render(); 
+    }
     
 }
