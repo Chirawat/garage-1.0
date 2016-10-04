@@ -119,9 +119,20 @@ class QuotationController extends Controller
     {
         $model = new Quotation();
         
-        $customerModel = new Customer();
+        // customer
+        if( Yii::$app->request->get('fullname') )
+            $customerModel = Customer::find()->where(['fullname' => Yii::$app->request->get('fullname')])->one();
+        else{
+            $customerModel = new Customer();
+        }
         
-        $viecleModel = new Viecle();
+        // viecle
+        if( Yii::$app->request->get('plate_id') ){
+            $viecleModel = Viecle::find()->where(['plate_no' => Yii::$app->request->get('plate_id')])->one();
+        }
+        else{
+            $viecleModel = new Viecle();
+        }
         
         // Quotation Id    
         $year = date('Y');
@@ -269,7 +280,12 @@ class QuotationController extends Controller
             }
             
 
-            return $ret;
+            if( $ret ){
+               return ['status' => 'sucess', 'quotation_id' => $quotation->plate_no];
+            }
+           else{
+               return ['status' => 'failed', 'error' => $ret];
+           }
        }
    }
     
@@ -352,6 +368,95 @@ class QuotationController extends Controller
     }
 
    
+    public function actionViecleRegistration(){
+        $viecleModel = new Viecle();
+        
+        $customerModel = new Customer();
+        
+        $isUpdate = false;
+        if( $viecleModel->load(Yii::$app->request->post()) ){
+            if( $viecleModel->validate() ){
+                $isUpdate = $viecleModel->save();
+            }
+            else{
+                return $viecleModel->errors;
+            }
+        }
+        
+        if( $customerModel->load(Yii::$app->request->post()) ){
+            if( $customerModel->validate() ){
+                $isUpdate = $customerModel->save();
+            }
+            else{
+                return $customerModel->errors;
+            }
+        }
+        if($isUpdate){
+            return $this->redirect(['quotation/create', 'plate_id' => $viecleModel->plate_no, 'fullname' => $customerModel->fullname]);
+        }
+        else{
+            return $this->render('viecle_registration', [
+                // viecle
+                'viecleModel' => $viecleModel,
+
+                // customer
+                'customerModel' => $customerModel,
+            ]);    
+        }
+    }
+    
+    public function actionSummary(){
+        
+        $rows = [];
+        if( Yii::$app->request->post() ){
+            //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            
+            $beginDate = date_create(Yii::$app->request->post('start_date'));
+            $endDate = date_create(Yii::$app->request->post('end_date'));
+            $interval = date_diff($beginDate, $endDate);
+            $nMonth = $interval->format("%y")*12 + $interval->format("%m");
+            
+            $interval_t = [
+                'begin' => [ $beginDate, $endDate ],
+                'end' => [ $beginDate, $endDate ],
+            ];
+            
+            
+            //return $beginDate->format("Y-m-d");
+            
+            $lists = Quotation::find()->select(['CID'])->distinct()->all();
+        
+            foreach($lists as $list){
+                // customer list
+                $quotations = Quotation::find()->with(['descriptions', 'customer'])->where(['in', 'CID', $list]);
+                $quotations->andWhere(['between', 'quotation_date', $beginDate->format("Y-m-d"), $endDate->format("Y-m-d")]);
+                
+                // sum of value
+                $quotations_t = $quotations->all();
+                $val = 0;
+                foreach($quotations_t as $quotations_tt){
+                    $val += $quotations_tt->getDescriptions()->sum('price');
+                }
+                
+                // prepare count & value
+                $row = ['customer' => $quotations->one()->customer['fullname'], 'count' => $quotations->count(), 'value' => $val ];
+                
+                // push into rows
+                array_push($rows, $row);
+            }
+        
+            
+            //return $rows;
+            
+        }
+//        else{
+        return $this->render('summary', [
+            'rows' => $rows,
+        ]);
+//        }
+        
+    }
+    
     public function actionTest(){
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         
@@ -359,5 +464,4 @@ class QuotationController extends Controller
 
         return $userID;
     }
-   
 }

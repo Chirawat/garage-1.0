@@ -7,8 +7,6 @@ use yii\helpers\Html;
 /* @var $model app\models\Viecle */
 
 $this->title = 'ลงทะเบียนรถยนต์';
-$this->params['breadcrumbs'][] = ['label' => 'Viecles', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="viecle-create">
 

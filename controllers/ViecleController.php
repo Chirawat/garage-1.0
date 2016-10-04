@@ -137,8 +137,11 @@ class ViecleController extends Controller
                 $query = new Query;
 
                 $viecles = $query->select(["plate_no AS value"])->from('viecle')->where(['like', 'plate_no', $term])->all();
-
-                return $viecles;
+                
+                if(sizeof($viecles) != 0)
+                    return $viecles;
+                else
+                    return ['value' => 'ไม่พบ'];
             }
 //         }
     }

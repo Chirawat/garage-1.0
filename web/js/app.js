@@ -135,7 +135,10 @@ $(document).ready(function () {
                  },
                  success: function( data ) {
                      list = data;
-                     response( data );
+                     if( data.length != 0 )
+                        response( data );
+                     else
+                        response( {value: "ไม่พบ"} );
                  }
              });
         },
@@ -156,7 +159,7 @@ $(document).ready(function () {
 
 
      $("#part-list").autocomplete({
-         source: function( request, response ) {
+        source: function( request, response ) {
              $.ajax( {
                  url: "index.php?r=description/description-list",
                  dataType: "json",
@@ -165,7 +168,10 @@ $(document).ready(function () {
                  },
                  success: function( data ) {
                      list = data;
-                     response( data );
+                     if( data.length != 0 )
+                        response( data );
+                     else
+                        response( {value: "ไม่พบ"} );
                  }
              });
         },
@@ -218,24 +224,14 @@ $(document).ready(function () {
          }
 
      });
-
-     $("#viecle-plate_no").autocomplete({
-         source: function( request, response ) {
-             $.ajax( {
-                 url: "index.php?r=viecle/get-plate-id",
-                 dataType: "json",
-                 data: {
-                     term: request.term
-                 },
-                 success: function( data ) {
-                     list = data;
-                     response( data );
-                 }
-             });
-        },
-        close: function( event, ui ){
-            
+    $('#modal-save').on('hidden.bs.modal', function (e) {
+        window.location.replace("index.php/?r=quotation/view&quotation_id=" + data.quotation_id );
+    });
+    
+    $("#viewQuotation").click( function(){
+            var id = $("#quotationId").val()
+            window.location.replace("index.php/?r=quotation/view&quotation_id=" + id);
         }
-     });
+    );
 });
 

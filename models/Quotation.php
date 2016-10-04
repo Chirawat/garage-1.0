@@ -22,6 +22,7 @@ use Yii;
  */
 class Quotation extends \yii\db\ActiveRecord
 {
+    //public $cnt;
     /**
      * @inheritdoc
      */
@@ -72,7 +73,7 @@ class Quotation extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getC()
+    public function getCustomer()
     {
         return $this->hasOne(Customer::className(), ['CID' => 'CID']);
     }

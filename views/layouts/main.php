@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
@@ -28,7 +29,8 @@ AppAsset::register($this);
     <?php
     NavBar::begin([
         'brandLabel' => 'เจริญการช่าง',
-        'brandUrl' => Yii::$app->homeUrl,
+//        'brandUrl' => Yii::$app->homeUrl,
+        'brandUrl' => Url::to(['quotation/create']),
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],

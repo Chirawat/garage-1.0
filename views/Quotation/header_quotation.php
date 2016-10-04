@@ -9,19 +9,13 @@ use kartik\select2\Select2;
 use yii\bootstrap\Modal;
 use yii\jui\AutoComplete;
 
-
-//use keygenqt\autocompleteAjax\AutocompleteAjax;
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\QuotationSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = 'ใบเสนอราคา';
 
 $url = Url::to(['customer-list']);
 
 Modal::begin([
     'id' => 'modal-save',
-    'header' => '<h4>Hello world</h4>',
+    'header' => '<h5>การบันทึก</h5>',
 ]);
 
 echo 'บันทึกข้อมูลเรียบร้อย';
@@ -33,21 +27,25 @@ Modal::end();
             <form class="form-horizontal">
                     <div class="form-group">
                         <div class="col-sm-2 pull-left">
-                        <label class="control-label">เลขที่</label>
+                            <label class="control-label">เลขที่</label>
                         </div>
                         <div class="col-sm-6">
-                            <input id="quotationId" type="text" class="form-control col-sm-6" value=<?=$quotationId?>>
+                            <?php if( Yii::$app->request->get('quotation_id') != null ): ?>
+                                <input id="quotationId" type="text" class="form-control col-sm-6" value=<?=Yii::$app->request->get('quotation_id')?>>
+                            <?php else: ?>
+                                <input id="quotationId" type="text" class="form-control col-sm-6" value=<?=$quotationId?>>
+                            <?php endif; ?>
                         </div>
-                        <a href=<?=Url::to(['quotation/view'])?> class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></a>
+                        <a id="viewQuotation" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></a>
                         <a href=<?=Url::to(['quotation/create'])?> class="btn btn-primary"><span class="glyphicon glyphicon-file"></span></a>
                     </div>
             </form>
         </div>
         <div class="container col-sm-6">
             <div class="pull-right"> 
-                <a href="<?= Url::to(['viecle/create']) ?>" class="btn btn-primary"><span class="glyphicon glyphicon-save-file"></span> ลงทะเบียนรถยนต์</a>
+                <a href="<?= Url::to(['quotation/viecle-registration']) ?>" class="btn btn-primary"><span class="glyphicon glyphicon-save-file"></span> ลงทะเบียนรถยนต์</a>
                 <a id="btn-save" class="btn btn-primary"><span class="glyphicon glyphicon-save-file"></span> บันทึก</a>
-                <a target="_blank" href="<?= Url::to(['site/report']) ?>"class="btn btn-success"><span class="glyphicon glyphicon-print"></span> พิมพ์ใบเสนอราคา</a> </div>
+                <a target="_blank" href="<?= Url::to(['quotation/report', 'quotation_id' => Yii::$app->request->get('quotation_id')]) ?>"class="btn btn-success"><span class="glyphicon glyphicon-print"></span> พิมพ์ใบเสนอราคา</a> </div>
         </div>
     </div>
     
@@ -86,11 +84,27 @@ Modal::end();
         <div class="container col-xs-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">ข้อมูลรถ</h3> </div>
+                    <h3 class="panel-title">รายละเอียดใบเสนอราคา</h3> </div>
                 <div class="panel-body">
-                        
-                        
+                    <h5><b>ข้อมูลรถ</b></h5>
+                    <div class="row">
+                        <div class="col-sm-6">เลขทะเบียน <?= $viecleModel->plate_no ?></div>
+                        <div class="col-sm-6">ชื่อรถยนต์ <?= $viecleModel->viecle_name ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">เลขที่ตัวถัง <?= $viecleModel->body_code ?></div>
+                        <div class="col-sm-6">เลขที่เครื่องยนต์ <?= $viecleModel->engin_code ?></div>
+                    </div>
                     
+                    <h5><b>ข้อมูลลูกค้า</b></h5>
+                    <div class="row">
+                        <div class="col-sm-6">ชื่อลูกค้า <?= $customerModel->fullname ?></div>
+                        <div class="col-sm-6">ประเภทลูกค้า <?= $customerModel->type ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">โทรศัพท์ <?= $customerModel->phone ?></div>
+                        <div class="col-sm-6">แฟ็กส์ <?= $customerModel->fax ?></div>
+                    </div>
                 </div>
             </div>
         </div>

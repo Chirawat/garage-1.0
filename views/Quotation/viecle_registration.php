@@ -1,13 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-//use yii\widgets\ActiveForm;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
-
-/* @var $this yii\web\View */
-/* @var $model app\models\Viecle */
-/* @var $form yii\widgets\ActiveForm */
 ?>
     <div class="viecle-form">
         
@@ -30,56 +25,49 @@ use yii\helpers\Url;
                 <div class="panel-heading">
                     <h3 class="panel-title">ข้อมูลรถยนต์</h3> </div>
                 <div class="panel-body">
-<!--
                     <div class="row">
                         <div class='col-sm-6'>    
-                            <?= $form->field($model, 'viecle_type')->inline()->radioList(['CAR' => 'รถยนต์', 'MOTORCYCLE' => 'รถมอเตอร์ไซค์', 'OTHER' => 'รถคู่กรณี']) ?>
-                        </div>
-                    </div>
--->
-                    <div class="row">
-                        <div class='col-sm-6'>    
-                            <?= $form->field($model, 'plate_no')->textInput() ?>
+                            <?= $form->field($viecleModel, 'plate_no')->textInput() ?>
                         </div>
                         <div class='col-sm-6'>    
-                            <?= $form->field($model, 'viecle_name')->textInput() ?>
+                            <?= $form->field($viecleModel, 'viecle_name')->textInput() ?>
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class='col-sm-6'>    
-                            <?= $form->field($model, 'model')->textInput() ?>
+                            <?= $form->field($viecleModel, 'model')->textInput() ?>
                         </div>
                         <div class='col-sm-6'>    
-                            <?= $form->field($model, 'body_code')->textInput() ?>
+                            <?= $form->field($viecleModel, 'body_code')->textInput() ?>
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class='col-sm-6'>    
-                            <?= $form->field($model, 'engin_code')->textInput() ?>
+                            <?= $form->field($viecleModel, 'engin_code')->textInput() ?>
                         </div>
                         <div class='col-sm-6'>    
-                            <?= $form->field($model, 'viecle_year')->textInput() ?>
+                            <?= $form->field($viecleModel, 'viecle_year')->textInput() ?>
                         </div>
                         
                     </div>
                     
                     <div class="row">
                         <div class='col-sm-6'>    
-                            <?= $form->field($model, 'body_type')->textInput() ?>
+                            <?= $form->field($viecleModel, 'body_type')->textInput() ?>
                         </div>
                         <div class='col-sm-6'>    
-                            <?= $form->field($model, 'cc')->textInput() ?>
+                            <?= $form->field($viecleModel, 'cc')->textInput() ?>
                         </div>
                     </div>
                     
                     <div class="row">
                         <div class='col-sm-6'>    
-                            <?= $form->field($model, 'seat')->textInput() ?>
+                            <?= $form->field($viecleModel, 'seat')->textInput() ?>
                         </div>
                         <div class='col-sm-6'>    
-                            <?= $form->field($model, 'weight')->textInput() ?>
+                            <?= $form->field($viecleModel, 'weight')->textInput() ?>
                         </div>
                     </div>
                 </div>

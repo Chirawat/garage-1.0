@@ -133,7 +133,11 @@ class CustomerController extends Controller
                 ->limit(20);
             $command = $query->createCommand();
             $data = $command->queryAll();
-            $out = array_values($data);
+            
+            if(sizeof($data) != 0)
+                $out = array_values($data);
+            else
+                $out = ['value' => 'ไม่พบ'];
         }
          return $out;
     }
