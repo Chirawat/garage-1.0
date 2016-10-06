@@ -58,7 +58,7 @@ class Description extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getQ()
+    public function getQuotation()
     {
         return $this->hasOne(Quotation::className(), ['QID' => 'QID']);
     }

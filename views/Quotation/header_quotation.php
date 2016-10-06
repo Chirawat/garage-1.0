@@ -104,7 +104,7 @@ Modal::end();
                     </div>
                     <div class="row">
                         <div class="col-sm-6">โทรศัพท์ <?= $customerModel->phone ?></div>
-                        <div class="col-sm-6">แฟ็กส์ <?= $customerModel->fax ?></div>
+                        <div class="col-sm-6">แฟ็ก <?= $customerModel->fax ?></div>
                     </div>
                 </div>
             </div>

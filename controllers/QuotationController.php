@@ -405,11 +405,25 @@ class QuotationController extends Controller
         }
     }
     
+    function DateThai($strDate){
+//        $strYear = date("Y",strtotime($strDate))+543;
+        //$strMonth= date("n",strtotime($strDate));
+//        $strDay= date("j",strtotime($strDate));
+//        $strHour= date("H",strtotime($strDate));
+//        $strMinute= date("i",strtotime($strDate));
+//        $strSeconds= date("s",strtotime($strDate));
+        
+        $strMonthThai=$strMonthCut[$strMonth];
+
+        //    return "$strDay $strMonthThai $strYear, $strHour:$strMinute";
+//        return "$strDay $strMonthThai $strYear";
+        return $strMonthThai;
+    }
+    
     public function actionSummary(){
         
-        $rows = [];
+        $summaryData = [];
         if( Yii::$app->request->post() ){
-            //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             
             $beginDate = date_create(Yii::$app->request->post('start_date'));
             $endDate = date_create(Yii::$app->request->post('end_date'));
@@ -422,46 +436,45 @@ class QuotationController extends Controller
             ];
             
             
-            //return $beginDate->format("Y-m-d");
+            $summaryData['interval'] = [
+                'begin_date' => $beginDate,
+                'end_date' =>  $endDate,
+            ];
             
-            $lists = Quotation::find()->select(['CID'])->distinct()->all();
-        
-            foreach($lists as $list){
-                // customer list
-                $quotations = Quotation::find()->with(['descriptions', 'customer'])->where(['in', 'CID', $list]);
-                $quotations->andWhere(['between', 'quotation_date', $beginDate->format("Y-m-d"), $endDate->format("Y-m-d")]);
+            // find in 'Quatation' with corresponding condition
+            $quotations = (new Query())->select(['quotation_date', 'count(*) AS cnt'])->from('quotation')
+                ->where(['between', 'quotation_date', $beginDate->format("Y-m-d"), $endDate->format("Y-m-d")])
+                ->groupBy(['YEAR(quotation_date)', 'MONTH(quotation_date)'])
+                ->all();
+            
+            foreach($quotations as $quotation){
+                $dt = date_create( $quotation['quotation_date'] );
+                $dtYear = $dt->format("Y");
+                $dtMonth = $dt->format("m");
+                $strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม.","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
+                $temp = ['year_month' => $strMonthCut[(int)$dtMonth] . "-" . $dtYear];
                 
-                // sum of value
-                $quotations_t = $quotations->all();
-                $val = 0;
-                foreach($quotations_t as $quotations_tt){
-                    $val += $quotations_tt->getDescriptions()->sum('price');
+                $customers = (new Query())->select(['QID', 'CID', 'count(*) AS cnt', 'quotation_date'])->from('quotation')
+                    ->where(['YEAR(quotation_date)' => $dtYear, 
+                             'MONTH(quotation_date)' => $dtMonth])
+                    ->groupBy(['CID'])
+                    ->all();
+                
+                foreach($customers as $customer){  
+                    $descriptions = Description::find()->where(['QID' => $customer['QID']]);
+                    $customer['fullname'] = $descriptions->one()->quotation->customer['fullname'];
+                    $customer['total'] = $descriptions->sum('price');
+                    
+                    array_push($temp, $customer);
                 }
+                array_push($summaryData, $temp);
                 
-                // prepare count & value
-                $row = ['customer' => $quotations->one()->customer['fullname'], 'count' => $quotations->count(), 'value' => $val ];
-                
-                // push into rows
-                array_push($rows, $row);
             }
-        
-            
-            //return $rows;
-            
+//            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+//            return $summaryData;
         }
-//        else{
-        return $this->render('summary', [
-            'rows' => $rows,
-        ]);
-//        }
-        
-    }
-    
-    public function actionTest(){
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        
-        $userID = Yii::$app->user->identity->getId();
-
-        return $userID;
+            return $this->render('summary', [
+                'summaryData' => $summaryData,
+            ]);    
     }
 }
