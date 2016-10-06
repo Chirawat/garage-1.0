@@ -4,7 +4,7 @@ $(document).ready(function () {
     //var quotation_info = [];
     var id = 1;
     var list = [];
-
+    
     $("#add-button").click(function () {
         
         // check, empty?
@@ -216,22 +216,49 @@ $(document).ready(function () {
 
                  },
                  success: function(data){
-                     console.log(data);
-                     $("#modal-save").modal('show');
-                     $("#btn-save").addClass("disabled");
+                     //console.log(data);
+                     //$("#modal-save").modal('show');
+                     //$("#btn-save").addClass("disabled");
+                     //$("#btn-print").removeClass('disabled');
+                     
+                     var id = $("#quotationId").val()
+                     window.location.replace("?r=quotation/view&quotation_id=" + id);
+                     
                  }
              });
          }
 
      });
+    
     $('#modal-save').on('hidden.bs.modal', function (e) {
         window.location.replace("index.php/?r=quotation/view&quotation_id=" + data.quotation_id );
     });
     
     $("#viewQuotation").click( function(){
             var id = $("#quotationId").val()
-            window.location.replace("index.php/?r=quotation/view&quotation_id=" + id);
+            window.location.replace("?r=quotation/view&quotation_id=" + id);
         }
     );
+    
+    $("#quotationId").keyup(function(){
+        $("#viewQuotation").removeClass('disabled');
+    });
+    
+    $("#quotation-claim_no").keyup( function(){
+        $("#btn-save").removeClass('disabled');
+    });
+    
+    $("#btn-print").click( function(){
+        var quotationId = $("#quotationId").val();
+        var hrefStr = "index.php?r=quotation/report&quotation_id=" + quotationId;
+        $("#btn-print").attr("href", hrefStr);
+        //console.log();
+    });
+    
+    var pathname = window.location.href;
+    if( pathname.indexOf("view") != -1 ){
+        $("#btn-print").removeClass('disabled');
+        $("#btn-register").addClass('disabled');
+    }
 });
 

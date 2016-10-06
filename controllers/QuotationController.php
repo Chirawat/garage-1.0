@@ -281,7 +281,7 @@ class QuotationController extends Controller
             
 
             if( $ret ){
-               return ['status' => 'sucess', 'quotation_id' => $quotation->plate_no];
+               return ['status' => 'sucess', 'QID' => $QID];
             }
            else{
                return ['status' => 'failed', 'error' => $ret];

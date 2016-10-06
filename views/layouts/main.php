@@ -38,21 +38,18 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            //['label' => 'Home', 'url' => ['/site/index']],
-            //['label' => 'About', 'url' => ['/site/about']],
-            //['label' => 'Contact', 'url' => ['/site/contact']],
-            [
-                'label' => 'การตั้งค่า',
-                'items' => [
-                     ['label' => 'ข้อมูลพนักงาน', 'url' => '#'],
-                     ['label' => 'ข้อมูลบริษัทประกัน', 'url' => '#'],
-                     ['label' => 'ข้อมูลลูกค้าทั่วไป', 'url' => '#'],
-                    '<li class="divider"></li>',
-                     ['label' => 'ข้อมูลกิจการ', 'url' => '#'],
-                ],
-                
-            ],
-            ['label' => 'สรุปประจำเดือน', 'url' => '#'],
+//            [
+//                'label' => 'การตั้งค่า',
+//                'items' => [
+//                     ['label' => 'ข้อมูลพนักงาน', 'url' => '#'],
+//                     ['label' => 'ข้อมูลบริษัทประกัน', 'url' => '#'],
+//                     ['label' => 'ข้อมูลลูกค้าทั่วไป', 'url' => '#'],
+//                    '<li class="divider"></li>',
+//                     ['label' => 'ข้อมูลกิจการ', 'url' => '#'],
+//                ],
+//                
+//            ],
+            ['label' => 'สรุปประจำเดือน', 'url' => Url::to(['quotation/summary'])],
              
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
@@ -81,9 +78,9 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; เจริญการช่าง <?= date('Y') ?></p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+<!--        <p class="pull-right"><?= Yii::powered() ?></p>-->
     </div>
 </footer>
 

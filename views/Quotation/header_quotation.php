@@ -36,16 +36,17 @@ Modal::end();
                                 <input id="quotationId" type="text" class="form-control col-sm-6" value=<?=$quotationId?>>
                             <?php endif; ?>
                         </div>
-                        <a id="viewQuotation" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></a>
+                        <a id="viewQuotation" class="btn btn-primary disabled"><span class="glyphicon glyphicon-search"></span></a>
                         <a href=<?=Url::to(['quotation/create'])?> class="btn btn-primary"><span class="glyphicon glyphicon-file"></span></a>
                     </div>
             </form>
         </div>
         <div class="container col-sm-6">
             <div class="pull-right"> 
-                <a href="<?= Url::to(['quotation/viecle-registration']) ?>" class="btn btn-primary"><span class="glyphicon glyphicon-save-file"></span> ลงทะเบียนรถยนต์</a>
-                <a id="btn-save" class="btn btn-primary"><span class="glyphicon glyphicon-save-file"></span> บันทึก</a>
-                <a target="_blank" href="<?= Url::to(['quotation/report', 'quotation_id' => Yii::$app->request->get('quotation_id')]) ?>"class="btn btn-success"><span class="glyphicon glyphicon-print"></span> พิมพ์ใบเสนอราคา</a> </div>
+                <a id="btn-register" href="<?= Url::to(['quotation/viecle-registration']) ?>" class="btn btn-primary"><span class="glyphicon glyphicon-save-file"></span> ลงทะเบียนรถยนต์</a>
+                <a id="btn-save" class="btn btn-primary disabled"><span class="glyphicon glyphicon-save-file"></span> บันทึก</a>
+<!--                <a id="btn-print" target="_blank" href="<?= Url::to(['quotation/report', 'quotation_id' => Yii::$app->request->get('quotation_id')]) ?>"class="btn btn-success disabled"><span class="glyphicon glyphicon-print"></span> พิมพ์ใบเสนอราคา</a> </div>-->
+                <a id="btn-print" target="_blank" class="btn btn-success disabled"><span class="glyphicon glyphicon-print"></span> พิมพ์ใบเสนอราคา</a> </div>
         </div>
     </div>
     
