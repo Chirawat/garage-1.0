@@ -90,6 +90,7 @@ class QuotationController extends Controller
             'partDescriptionModel' => $partDescriptionModel,
             'sumPart' => $sumPart,
             'numRow' => $numRow,
+            'qid' => $qid,
         ]);
         
         return $this->render('header_quotation', [
@@ -504,6 +505,7 @@ class QuotationController extends Controller
             'descriptionModel' => $descriptionModel,
             'newDescription' => $newDescription,
             'qid' => $model->QID,
+            'quotation_id' => $model->quotation_id,
         ]);
         return $this->render('header_quotation', [
             'model' => $model,          // quotation
@@ -537,7 +539,7 @@ class QuotationController extends Controller
             if( $description->validate() ){
                 $description->save();
                 
-                return $this->redirect(['quotation/edit', 'qid' => $qid]);
+                return $this->redirect(['quotation/edit', 'quotation_id' => $qid]);
             }
             else{
                 return $description->errors;

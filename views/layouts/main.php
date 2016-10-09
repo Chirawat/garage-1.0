@@ -49,6 +49,8 @@ AppAsset::register($this);
 //                ],
 //                
 //            ],
+            //['label' => 'ใบแจ้งหนี้', 'url' => Url::to(['invoice/invoice'])],
+            ['label' => 'ใบเสร็จรับเงิน', 'url' => Url::to(['invoice/invoice'])],
             ['label' => 'สรุปประจำเดือน', 'url' => Url::to(['quotation/summary'])],
              
             Yii::$app->user->isGuest ? (

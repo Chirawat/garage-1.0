@@ -33,6 +33,7 @@ use yii\helpers\Url;
     <?php ActiveForm::end(); ?>
     <?php Modal::end() ?>
     <a href="#add-description" data-toggle="modal" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> เพิ่มรายการ</a>
+    <a href="<?= Url::to(['quotation/view', 'quotation_id' => $quotation_id]) ?>" data-toggle="modal" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> เสร็จสิ้น</a>
 </div>
 <table class="table table-bordered">
     <thead>

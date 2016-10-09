@@ -1,3 +1,10 @@
+<?php
+use yii\helpers\Html;
+?>
+
+<div class="form-group">
+    <?= Html::a('แก้ไขรายการ',['quotation/edit', 'qid' => $qid], ['class' => 'btn btn-primary']) ?>
+</div>
 <table class="table table-bordered" id="myTable">
     <thead>
         <tr bgcolor="#000000">
@@ -17,7 +24,7 @@
                     <td><?= isset($partDescriptionModel[$i]) ? $partDescriptionModel[$i]->description:null ?></td>
                     <td class="text-right"><?= isset($partDescriptionModel[$i]) ? number_format( $partDescriptionModel[$i]->price, 2 ):null ?></td>
                     <td>
-                        <a href="#" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-pencil"></span></a>
+<!--                        <a href="#" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-pencil"></span></a>-->
                     </td>
                 </tr>
             <?php endfor; ?>

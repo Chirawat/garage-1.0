@@ -1,4 +1,6 @@
-<?php use yii\helpers\Html; 
+<?php 
+use yii\helpers\Html; 
+
 function DateThai($strDate){
     $strYear = date("Y",strtotime($strDate))+543;
     $strMonth= date("n",strtotime($strDate));
@@ -15,7 +17,7 @@ function DateThai($strDate){
 ?>
     <table width="100%">
         <tr>
-            <td>
+            <td width="20%">
                 <?=Html::img(Yii::getAlias('@app').'/web/img/intel_logo.png', ['width' => 100])?>
             </td>
             <td>
@@ -38,7 +40,7 @@ function DateThai($strDate){
         </tr>
     </table>
 <br/>
-    <table class="table_bordered" width="100%" border="0" cellpadding="2" cellspacing="0">
+    <table class="table_bordered" width="100%" border="0" cellpadding="2" cellspacing="0" style="border: 0px solid transparent;">
         <tr>
             <td class="column-header" colspan="2">ชื่อรถยนต์ / รุ่น</td>
             <td class="column-header">เลขทะเบียน</td>
@@ -55,7 +57,7 @@ function DateThai($strDate){
         </tr>
     </table>
     <!--<pagebreak />-->
-    <table class="table_bordered" width="100%" border="0" cellpadding="2" cellspacing="0">
+    <table class="table_bordered" width="100%" border="0" cellpadding="2" cellspacing="0" style="border: 0px solid transparent;">
         <tr>
             <td class="column-header">ลำดับ</td>
             <td class="column-header" colspan="2">รายการซ่อม</td>
@@ -80,7 +82,7 @@ function DateThai($strDate){
             <td class="text-right"><b><?= number_format( $sumPart, 2 ) ?></b></td>
         </tr>
         <tr>
-            <td class="total-cell" colspan="4"></td>
+            <td class="total-cell" colspan="4" style="border: 0px solid transparent;"></td>
             <td class="text-right" colspan="2"><b>รวมสุทธิ</b></td>
             <td class="text-right"><b><?= number_format( $sumMaintenance + $sumPart, 2) ?></b></td>
         </tr>
