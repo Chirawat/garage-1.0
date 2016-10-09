@@ -477,4 +477,71 @@ class QuotationController extends Controller
                 'summaryData' => $summaryData,
             ]);    
     }
+    
+    public function actionEdit($qid){
+        
+        if( Yii::$app->request->post() ){
+            // update
+            $description = Description::findOne(\Yii::$app->request->post('did'));
+            $description->load( Yii::$app->request->post() );
+            
+            if( $description->validate() )
+                $description->save();   
+            //else
+                //error!
+            
+            //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            //return $description;
+        }
+        
+        $model = Quotation::findOne( $qid );
+        $customerModel = $model->customer;
+        $viecleModel = $model->viecle;
+        $descriptionModel = $model->descriptions;
+        
+        $newDescription = new Description();
+        $detailView = $this->renderPartial('edit',[
+            'descriptionModel' => $descriptionModel,
+            'newDescription' => $newDescription,
+            'qid' => $model->QID,
+        ]);
+        return $this->render('header_quotation', [
+            'model' => $model,          // quotation
+            'quotationId' => null,
+            'customerModel' => $customerModel,
+            'viecleModel' => $viecleModel,
+            'detailView'  => $detailView,
+        ]);
+    }
+    
+    public function actionDeleteDescription(){
+        if( Yii::$app->request->post()){
+            $did = Yii::$app->request->post('did');
+            $ret =  Description::findOne( $did )->delete();
+            if( $ret ){
+                $qid = Yii::$app->request->post('qid');
+                return $this->redirect(['quotation/edit', 'qid' => $qid]);
+            }
+        }
+    }
+    
+    public function actionAddDescription(){
+        if( Yii::$app->request->post() ){
+            $description = new Description();
+            $description->load( Yii::$app->request->post() );
+            
+            $qid = Yii::$app->request->post('qid');
+            $description->QID = $qid;
+            
+//            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            if( $description->validate() ){
+                $description->save();
+                
+                return $this->redirect(['quotation/edit', 'qid' => $qid]);
+            }
+            else{
+                return $description->errors;
+            }
+        }
+    }
 }

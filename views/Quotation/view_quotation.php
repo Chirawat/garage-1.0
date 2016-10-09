@@ -16,7 +16,9 @@
                     <td class="text-right"><?= isset($maintenanceDescriptionModel[$i]) ? number_format( $maintenanceDescriptionModel[$i]->price, 2 ):null ?></td>
                     <td><?= isset($partDescriptionModel[$i]) ? $partDescriptionModel[$i]->description:null ?></td>
                     <td class="text-right"><?= isset($partDescriptionModel[$i]) ? number_format( $partDescriptionModel[$i]->price, 2 ):null ?></td>
-                    <td></td>
+                    <td>
+                        <a href="#" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-pencil"></span></a>
+                    </td>
                 </tr>
             <?php endfor; ?>
         </tbody>

@@ -49,9 +49,9 @@ class Description extends \yii\db\ActiveRecord
             'DID' => 'Did',
             'QID' => 'Qid',
             'row' => 'Row',
-            'description' => 'Description',
-            'type' => 'Type',
-            'price' => 'Price',
+            'description' => 'รายการ',
+            'type' => 'ประเภท',
+            'price' => 'ราคา',
         ];
     }
 
