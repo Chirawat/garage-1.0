@@ -61,10 +61,11 @@ class TestController extends Controller
     }
     
     public function actionAddDescription(){
-        for($i = 58; $i <= 159; $i++ ){
+        for($i = 1; $i <= 100; $i++ ){
             $description = new Description();
-            $description->QID = $i;
-            $description->description = "test";
+            $description->QID = 160;
+            $description->type = "PART";
+            $description->description = "test" . $i;
             $description->price = 100;
             
             $description->save();

@@ -1,6 +1,19 @@
 <?php
 use yii\helpers\Html; 
 
+function DateThai($strDate){
+    $strYear = date("Y",strtotime($strDate))+543;
+    $strMonth= date("n",strtotime($strDate));
+    $strDay= date("j",strtotime($strDate));
+    $strHour= date("H",strtotime($strDate));
+    $strMinute= date("i",strtotime($strDate));
+    $strSeconds= date("s",strtotime($strDate));
+    $strMonthCut = Array("","มกราคม","กุมภาพันธ์","มีนาคม.","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม");
+    $strMonthThai=$strMonthCut[$strMonth];
+    
+//    return "$strDay $strMonthThai $strYear, $strHour:$strMinute";
+    return "$strDay $strMonthThai $strYear";
+}
 //$this->title = "ใบเสร็จรับเงิน/ใบกํากับภาษี";
 ?>
     <table width="100%">
@@ -23,7 +36,7 @@ use yii\helpers\Html;
             <td width="50%" style="padding: 10px;">ชื่อ <?= $invoice->customer->fullname ?>
                 <br /> ที่อยู่ <?= $invoice->customer->address ?>
                 <br /> เลขที่ผู้เสียภาษีอากร <?= $invoice->customer->taxpayer_id ?></td>
-            <td width="50%" style="padding: 10px;">เลขที่ <?= $invoice->invoice_id ?> วันที่ <?= $invoice->date ?>
+            <td width="50%" style="padding: 10px;">เลขที่ <?= $invoice->invoice_id ?> วันที่ <?= DateThai( $invoice->date ) ?>
                 <br /> เลข<u>ประจำตัว</u>ผู้เสียภาษีอากร 0353556000391
                 <br />  สาขา สำนักงานใหญ่</td>
         </tr>

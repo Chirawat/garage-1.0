@@ -42,32 +42,32 @@ function DateThai($strDate){
 <br/>
     <table class="table_bordered" width="100%" border="0" cellpadding="2" cellspacing="0" style="border: 0px solid transparent;">
         <tr>
-            <td class="column-header" colspan="2">ชื่อรถยนต์ / รุ่น</td>
-            <td class="column-header">เลขทะเบียน</td>
-            <td class="column-header" colspan="2">เลขตัวถัง</td>
-            <td class="column-header" colspan="2">เลขเครื่องยนต์</td>
-            <td class="column-header">ปีรุ่น</td>
+            <td width="20%" class="column-header">ชื่อรถยนต์ / รุ่น</td>
+            <td width="20%" class="column-header">เลขทะเบียน</td>
+            <td width="20%" class="column-header">เลขตัวถัง</td>
+            <td width="20%" class="column-header">เลขเครื่องยนต์</td>
+            <td width="20%" class="column-header">ปีรุ่น</td>
         </tr>
         <tr>
-            <td class="text-centered" colspan="2"><?= $viecleModel->brand . " " . $viecleModel->model ?></td>
+            <td class="text-centered"><?= $viecleModel->brand . " " . $viecleModel->model ?></td>
             <td class="text-centered"><?= $viecleModel->plate_no ?></td>
-            <td class="text-centered" colspan="2"><?= $viecleModel->body_code ?></td>
-            <td class="text-centered" colspan="2"><?= $viecleModel->engin_code ?></td>
+            <td class="text-centered"><?= $viecleModel->body_code ?></td>
+            <td class="text-centered"><?= $viecleModel->engin_code ?></td>
             <td class="text-centered"><?= $viecleModel->viecle_year ?></td>
         </tr>
     </table>
     <!--<pagebreak />-->
     <table class="table_bordered" width="100%" border="0" cellpadding="2" cellspacing="0" style="border: 0px solid transparent;">
         <tr>
-            <td class="column-header">ลำดับ</td>
-            <td class="column-header" colspan="2">รายการซ่อม</td>
-            <td class="column-header">ราคา</td>
-            <td class="column-header" colspan="2">รายการอะไหล่</td>
-            <td class="column-header">ราคา</td>
+            <td width="10%" class="column-header">ลำดับ</td>
+            <td width="30%" class="column-header" colspan="2">รายการซ่อม</td>
+            <td width="15%" class="column-header">ราคา</td>
+            <td width="30%" class="column-header" colspan="2">รายการอะไหล่</td>
+            <td width="15%" class="column-header">ราคา</td>
         </tr>
         <?php for($i = 0; $i < $numRow; $i++):?>
         <tr>
-            <td class="text-centered"><?= ($i + 1) ?></td>
+            <td style="text-align: center;"><?= ($i + 1) ?></td>
             <td colspan="2" class="description"><?= isset($maintenanceDescriptionModel[$i]) ? $maintenanceDescriptionModel[$i]->description:null ?></td>
             <td class="text-right"><?= isset($maintenanceDescriptionModel[$i]) ? number_format( $maintenanceDescriptionModel[$i]->price, 2):null ?></td>
             <td colspan="2" class="description"><?= isset($partDescriptionModel[$i]) ? $partDescriptionModel[$i]->description:null ?></td>

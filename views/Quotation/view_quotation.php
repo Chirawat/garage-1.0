@@ -18,7 +18,7 @@ use yii\helpers\Html;
         <tbody>
             <?php for($i = 0; $i < $numRow; $i++):?>
                 <tr>
-                    <td><?= ($i + 1) ?></td>
+                    <td style="text-align: center;"><?= ($i + 1) ?></td>
                     <td><?= isset($maintenanceDescriptionModel[$i]) ? $maintenanceDescriptionModel[$i]->description:null ?></td>
                     <td class="text-right"><?= isset($maintenanceDescriptionModel[$i]) ? number_format( $maintenanceDescriptionModel[$i]->price, 2 ):null ?></td>
                     <td><?= isset($partDescriptionModel[$i]) ? $partDescriptionModel[$i]->description:null ?></td>
