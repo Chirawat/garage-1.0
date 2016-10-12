@@ -33,7 +33,7 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             [['fullname', 'type', 'address'], 'string'],
-            [['phone', 'fax'], 'integer'],
+            [['phone', 'fax', 'taxpayer_id'], 'integer'],
         ];
     }
 
@@ -49,6 +49,7 @@ class Customer extends \yii\db\ActiveRecord
             'address' => 'ที่อยู่',
             'phone' => 'โทรศัพท์',
             'fax' => 'แฟกซ์',
+            'taxpayer_id' => 'เลขประจำตัวผู้เสียภาษี',
         ];
     }
 

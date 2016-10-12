@@ -4,12 +4,11 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\widgets\Pjax;
-use yii\web\JsExpression;
 use yii\helpers\Url;
-use kartik\select2\Select2;
 use yii\bootstrap\Modal;
 use yii\jui\AutoComplete;
 use yii\jui\JuiAsset;
+
 $this->title = 'ใบเสร็จ';
 
 $url = Url::to(['customer-list']);
@@ -46,8 +45,8 @@ Modal::end();
     </div>
     <div class="container col-sm-6">
         <div class="pull-right"> 
-            <a id="btn-save-invoice" class="btn btn-primary"><span class="glyphicon glyphicon-save-file"></span> บันทึก</a>
-            <a href="<?= Url::to(['invoice/invoice-report', 'invoice_id'=> Yii::$app->request->get('invoice_id')]) ?>" id="btn-print-invoice" target="_blank" class="btn btn-success"><span class="glyphicon glyphicon-print"></span> พิมพ์ใบเสร็จ</a> </div>
+            <a id="btn-save-invoice" class="btn btn-primary disabled"><span class="glyphicon glyphicon-save-file"></span> บันทึก</a>
+            <a href="<?= Url::to(['invoice/invoice-report', 'invoice_id'=> Yii::$app->request->get('invoice_id'), 'iid'=> Yii::$app->request->get('iid')]) ?>" id="btn-print-invoice" target="_blank" class="btn btn-success disabled"><span class="glyphicon glyphicon-print"></span> พิมพ์ใบเสร็จ</a> </div>
     </div>
 </div>
 
@@ -69,6 +68,9 @@ Modal::end();
                                     ],
                                     'clientOptions' => [
                                         'source' => Url::to(['customer/customer-list']),
+                                    ],
+                                    'clientEvents' => [
+                                        'select' => 'function(){ }',
                                     ],
                                 ]) ?>
                             <?php else: ?>

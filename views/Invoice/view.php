@@ -20,7 +20,6 @@ use yii\jui\AutoComplete;
                 </tr>
             </thead>
             <tbody> 
-                
                 <?php $i = 1; foreach($descriptions as $description):?>
                     <tr>
                         <td style="text-align: center;"><?= $i++ ?></td>
@@ -35,7 +34,7 @@ use yii\jui\AutoComplete;
                     <td></td>
                     <td>จำนวนเงิน</td>
                     <td>
-                        <div id="invoice-total"></div>
+                        <div id="invoice-total"><?= number_format( $total, 2 ) ?></div>
                     </td>
                     <td></td>
                 </tr>
@@ -43,7 +42,7 @@ use yii\jui\AutoComplete;
                     <td></td>
                     <td>ภาษีมูลค่าเพิ่ม (7%)</td>
                     <td>
-                        <div id="invoice-tax"></div>
+                        <div id="invoice-tax"><?= number_format( $vat, 2 ) ?></div>
                     </td>
                     <td></td>
                 </tr>
@@ -51,7 +50,7 @@ use yii\jui\AutoComplete;
                     <td></td>
                     <td>ยอดรวมทั้งสิ้น</td>
                     <td>
-                        <div id="invoice-grand-total"></div>
+                        <div id="invoice-grand-total"><?= number_format( $grandTotal, 2 ) ?></div>
                     </td>
                     <td></td>
                 </tr>

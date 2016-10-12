@@ -80,10 +80,15 @@ class InvoiceController extends Controller
     }
     
     
-    public function actionInvoiceReport($invoice_id){
+    public function actionInvoiceReport($iid=null, $invoice_id=null){
         //////////////// REPORT PROCEDURE ////////////////////////////////////////
-        
-        $invoice = Invoice::find()->where(['invoice_id' => $invoice_id])->one();
+            
+        if( $invoice_id != null ){
+            $invoice = Invoice::find()->where(['invoice_id' => $invoice_id])->one();
+        }
+        else{
+            $invoice = Invoice::find()->where(['iid' => $iid])->one();
+        }
         $total = $invoice->getInvoiceDescriptions()->sum('price');
         $vat = $total * 0.07;
         $grandTotal = $total + $vat;
@@ -141,10 +146,20 @@ class InvoiceController extends Controller
         else{
             $invoice = Invoice::find()->where(['iid' => $iid])->one();
         }
+        
+        
+        $total = $invoice->getInvoiceDescriptions()->sum('price');
+        $vat = $total * 0.07;
+        $grandTotal = $total + $vat;
+        
+        
         //return $invoice->invoiceDescriptions;
         $detail = $this->renderPartial('view',[
             'invoice' => $invoice,
             'descriptions' => $invoice->invoiceDescriptions,
+            'total' => $total,
+            'vat' => $vat,
+            'grandTotal' => $grandTotal,
         ]);
         
         $customer = $invoice->customer;

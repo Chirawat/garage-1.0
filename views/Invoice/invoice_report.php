@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html; 
 
+//$this->title = "ใบเสร็จรับเงิน/ใบกํากับภาษี";
 ?>
     <table width="100%">
         <tr>
@@ -21,8 +22,8 @@ use yii\helpers\Html;
         <tr>
             <td width="50%" style="padding: 10px;">ชื่อ <?= $invoice->customer->fullname ?>
                 <br /> ที่อยู่ <?= $invoice->customer->address ?>
-                <br /> เลขที่ผู้เสียภาษีอากร </td>
-            <td width="50%" style="padding: 10px;">เล่มที่ <?= $invoice->invoice_id ?> วันที่ <?= $invoice->date ?>
+                <br /> เลขที่ผู้เสียภาษีอากร <?= $invoice->customer->taxpayer_id ?></td>
+            <td width="50%" style="padding: 10px;">เลขที่ <?= $invoice->invoice_id ?> วันที่ <?= $invoice->date ?>
                 <br /> เลข<u>ประจำตัว</u>ผู้เสียภาษีอากร 0353556000391
                 <br />  สาขา สำนักงานใหญ่</td>
         </tr>

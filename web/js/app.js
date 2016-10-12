@@ -109,9 +109,9 @@ $(document).ready(function () {
          var total = total_maintenance + total_part;
          
          // update DOM
-         $("#maintenance-total").text( total_maintenance.toFixed(2) );
-         $("#part-total").text( total_part.toFixed(2) );  // toFixed - number of digit
-         $("#total").text( total.toFixed(2) );
+         $("#maintenance-total").text( formatMoney( total_maintenance, 2) );
+         $("#part-total").text( formatMoney( total_part, 2) );  // toFixed - number of digit
+         $("#total").text( formatMoney( total, 2 ) );
 
      }
 
@@ -217,14 +217,8 @@ $(document).ready(function () {
 
                  },
                  success: function(data){
-                     //console.log(data);
-                     //$("#modal-save").modal('show');
-                     //$("#btn-save").addClass("disabled");
-                     //$("#btn-print").removeClass('disabled');
-                     
                      var id = $("#quotationId").val()
                      window.location.replace("?r=quotation/view&quotation_id=" + id);
-                     
                  }
              });
          }
@@ -259,6 +253,7 @@ $(document).ready(function () {
     var pathname = window.location.href;
     if( pathname.indexOf("view") != -1 ){
         $("#btn-print").removeClass('disabled');
+        $("#btn-print-invoice").removeClass('disabled');  // for invoice print
         $("#btn-register").addClass('disabled');
     }
     
@@ -291,14 +286,15 @@ $(document).ready(function () {
                 price: $("#maintenance-price").val()
             });
         }
+        // Cal total
+        calTotalInvoice();
         
         // clear text box value
         $("#maintenance-list").val("");
         $("#maintenance-price").val("");
         id++;
         
-        // Cal total
-        calTotalInvoice();
+        
     });
 
     $("table#myTable").on("click", "#btn-del-invoice", function (event) {
@@ -313,27 +309,33 @@ $(document).ready(function () {
     });
     
     function calTotalInvoice(){
-        var total_maintenance = 0;
+        var total_invoice = 0;
 
-        for(var i = 0, len = maintenance.length; i < len; i++){
-            total_maintenance += parseFloat(maintenance[i].price);
+        for(var i = 0, len = invoice.length; i < len; i++){
+            total_invoice += parseFloat(invoice[i].price);
         }
 
         // update DOM
-        $("#invoice-total").text( total_maintenance.toFixed(2) );
+        var total = total_invoice.toFixed(2);
+        $("#invoice-total").text( formatMoney( total_invoice, 2) );
         
-        var tax = total_maintenance * 0.07;
-        $("#invoice-tax").text( tax.toFixed(2) );
+        var vat = total_invoice * 0.07;
+        $("#invoice-tax").text( formatMoney( vat ) );
         
-        var grandTotal = total_maintenance + tax;
-        $("#invoice-grand-total").text( grandTotal );
+        var grandTotal = total_invoice + vat;
+        $("#invoice-grand-total").text( formatMoney( grandTotal ) );
     };
     
     $("#maintenance-list").keyup( function(){
-        $("#btn-save").removeClass('disabled');
+        //console.log("pressed");
+        $("#btn-save-invoice").removeClass('disabled');
     });
     
     $("#btn-save-invoice").on("click", function(event, ui){
+        // error, customer cannot be blank!
+        if( $("#customer").val() == "" )
+            window.alert("ต้องเลือกลูกค้าก่อน");
+        
         $.ajax({
              url: "index.php?r=invoice/create",
              type: 'json', 
@@ -360,3 +362,13 @@ $(document).ready(function () {
     });
 });
 
+function formatMoney(n, c, d, t){
+    //var n = this, 
+    c = isNaN(c = Math.abs(c)) ? 2 : c, 
+    d = d == undefined ? "." : d, 
+    t = t == undefined ? "," : t, 
+    s = n < 0 ? "-" : "", 
+    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+    j = (j = i.length) > 3 ? j % 3 : 0;
+   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+ };
