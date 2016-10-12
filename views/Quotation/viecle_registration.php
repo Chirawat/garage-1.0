@@ -106,6 +106,11 @@ use yii\helpers\Url;
                             <?= $form->field($customerModel, 'fax')->textInput() ?>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class='col-sm-6'> 
+                            <?= $form->field($customerModel, 'taxpayer_id')->textInput() ?>
+                        </div>
+                    </div>
                 </div>
             </div>
         

@@ -121,7 +121,7 @@ class InvoiceController extends Controller
         // any css to be embedded if required
         //        'cssInline' => '.kv-heading-1{font-size:18px}', 
         // set mPDF properties on the fly
-        'options' => ['title' => 'ใบเสนอราคา'],
+        'options' => ['title' => 'ใบเสร็จรับเงิน/ใบกํากับภาษี'],
         // call mPDF methods on the fly
         'methods' => [ 
             //'SetHeader'=>['Krajee Report Header'], 
