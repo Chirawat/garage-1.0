@@ -19,12 +19,12 @@ use yii\helpers\Html;
     <h3 class="header">ใบเสร็จรับเงิน/ใบกำกับภาษี</h3>
     <table class="table_bordered" width="100%" border="0" cellpadding="2" cellspacing="0" style="border: 0px solid transparent;">
         <tr>
-            <td width="50%" style="padding: 10px;">ชื่อ
-                <br /> ที่อยู่
-                <br /> เลขที่ผู้เสียภาษีอากร</td>
-            <td width="50%" style="padding: 10px;">เล่มที่........วันที่........
-                <br /> เลขประจำตัวผู้เสียภาษีอากร
-                <br /> ............ สาขา........</td>
+            <td width="50%" style="padding: 10px;">ชื่อ <?= $invoice->customer->fullname ?>
+                <br /> ที่อยู่ <?= $invoice->customer->address ?>
+                <br /> เลขที่ผู้เสียภาษีอากร </td>
+            <td width="50%" style="padding: 10px;">เล่มที่ <?= $invoice->invoice_id ?> วันที่ <?= $invoice->date ?>
+                <br /> เลข<u>ประจำตัว</u>ผู้เสียภาษีอากร 0353556000391
+                <br />  สาขา สำนักงานใหญ่</td>
         </tr>
     </table>
     <table class="table_bordered" width="100%" border="0" cellpadding="2" cellspacing="0" style="border: 0px solid transparent;">
@@ -34,22 +34,25 @@ use yii\helpers\Html;
                 <td class="column-header">รายการ</td>
                 <td width="30%" class="column-header">ราคา</td>
             </tr>
+            <?php $i = 1; foreach( $invoice->invoiceDescriptions as $description): ?>
             <tr>
-                <td style="text-align: center;">1</td>
-                <td>รายการ 1</td>
-                <td style="text-align: right;">10.00</td>
+                <td style="text-align: center;"><?= $i++ ?></td>
+                <td><?= $description->description ?></td>
+                <td style="text-align: right;"><?= number_format($description->price, 2) ?></td>
             </tr>
+            <?php endforeach; ?>
+            
             <tr>
                 <td colspan="2" style="text-align:right; border: 0px solid transparent;">จำนวนเงิน</td>
-                <td style="text-align: right;">10.00</td>
+                <td style="text-align: right;"><?= number_format( $total, 2 ) ?></td>
             </tr>
             <tr>
                 <td colspan="2" style="text-align:right; border: 0px solid transparent;">ภาษีมูลค่าเพิ่ม (7%)</td>
-                <td style="text-align: right;">10.00</td>
+                <td style="text-align: right;"><?= number_format( $vat, 2 ) ?></td>
             </tr>
             <tr>
                 <td colspan="2" style="text-align:right; border: 0px solid transparent;">ยอดรวมทั้งสิ้น</td>
-                <td style="text-align: right;">10.00</td>
+                <td style="text-align: right;"><?= number_format( $grandTotal, 2 ) ?></td>
             </tr>
         </tbody>
     </table>

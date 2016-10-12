@@ -6,6 +6,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use kartik\mpdf\Pdf;
+use app\Models\Invoice;
+use app\Models\InvoiceDescription;
+use app\Models\Customer;
 
 class InvoiceController extends Controller
 {
@@ -22,18 +25,77 @@ class InvoiceController extends Controller
     }
     
     
-    public function actionInvoice(){
-        return $this->render('invoice',[
-            
+    public function actionCreate(){
+        if( Yii::$app->request->isAjax ){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $invoice = new Invoice();
+
+            $fullname = Yii::$app->request->post('customer');
+            $invoice->CID = Customer::find()->where(['fullname' => $fullname])->one()['CID'];
+            if( $invoice->CID == "") // error case
+                return "invoice->CID cannot blank";
+
+            $invoice->date = date('Y-m-d');
+            $invoice->invoice_id = Yii::$app->request->post('invoice_id');
+            $invoice->employee = Yii::$app->user->identity->getId();
+
+            if( $invoice->validate() ){
+                $ret = $invoice->save();
+
+                $IID = Invoice::find()->orderBy(['IID' => SORT_DESC])->one()['IID'];
+
+                $InvoiceDescriptions = Yii::$app->request->post('invoice_description');
+                foreach( $InvoiceDescriptions as $InvoiceDescription)   {
+                    $InvoiceDescription_t = new InvoiceDescription();
+                    $InvoiceDescription_t->IID = $IID;
+                    $InvoiceDescription_t->description = $InvoiceDescription['list'];
+                    $InvoiceDescription_t->price = $InvoiceDescription['price'];
+
+                    if( $InvoiceDescription_t->validate() ){
+                        $ret = $InvoiceDescription_t->save();
+                    }
+                    else{
+                        $ret = $InvoiceDescription_t->errors;
+                    }
+                }
+            }
+            else{
+
+                $ret = $invoice->errors;
+            }
+            //return $ret;
+            return $this->redirect(['invoice/view', 'iid' => $IID]);
+        }
+        
+        $detail = $this->renderPartial('detail',[]);
+        
+        
+        $iid = Invoice::find()->where(['YEAR(date)' => date('Y')])->count();
+        $iid = ($iid + 1) . "/" . (date('Y')+543);
+        return $this->render('header',[
+            'detail' => $detail,
+            'iid' => $iid,
+            'customer' => null,
         ]);
     }
     
     
-    public function actionInvoiceReport(){
+    public function actionInvoiceReport($invoice_id){
         //////////////// REPORT PROCEDURE ////////////////////////////////////////
+        
+        $invoice = Invoice::find()->where(['invoice_id' => $invoice_id])->one();
+        $total = $invoice->getInvoiceDescriptions()->sum('price');
+        $vat = $total * 0.07;
+        $grandTotal = $total + $vat;
+        
         $thbStr = $this->num2thai(1200);
         $content = $this->renderPartial('invoice_report',[
-            'thbStr' => $thbStr,
+            'invoice' => $invoice,
+            
+            'total' => $total,
+            'vat' => $vat,
+            'grandTotal' => $grandTotal,
+            'thbStr' => $this->num2thai($grandTotal),
         ]);
 
         // setup kartik\mpdf\Pdf component
@@ -70,6 +132,30 @@ class InvoiceController extends Controller
 
         // return the pdf output as per the destination setting
         return $pdf->render(); 
+    }
+    
+    public function actionView($iid=null, $invoice_id=null){
+        if( $invoice_id != null ){
+            $invoice = Invoice::find()->where(['invoice_id' => $invoice_id])->one();
+        }
+        else{
+            $invoice = Invoice::find()->where(['iid' => $iid])->one();
+        }
+        //return $invoice->invoiceDescriptions;
+        $detail = $this->renderPartial('view',[
+            'invoice' => $invoice,
+            'descriptions' => $invoice->invoiceDescriptions,
+        ]);
+        
+        $customer = $invoice->customer;
+//        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+//        return $customer;
+        
+        return $this->render('header', [
+            'iid' => $invoice->invoice_id,
+            'customer' => $customer,
+            'detail' => $detail,
+        ]);
     }
     
     function num2thai($number){

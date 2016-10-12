@@ -1,6 +1,7 @@
 $(document).ready(function () {
     var maintenance = [];
     var part = [];
+    var invoice = [];
     //var quotation_info = [];
     var id = 1;
     var list = [];
@@ -59,13 +60,11 @@ $(document).ready(function () {
     });
     
     
+        
     // Remove button cliked
     $("table#myTable").on("click", "#ibtnDel", function (event) {
-        // Syntax $(selector).closest(filter) http://www.w3schools.com/jquery/traversing_closest.asp
-        //$(this).closest("tr").remove();  
         
         var closestRow = $(this).closest("tr");
-        
         
         // remove data object
         var removeIndex = arrayObjectIndexOf(maintenance, closestRow[0].id, "row");
@@ -84,6 +83,8 @@ $(document).ready(function () {
         updateTableIndex();
     });
 
+    
+    
     function arrayObjectIndexOf(myArray, searchTerm, property){
         for( var i = 0, len = myArray.length; i < len; i++ ){
             if(myArray[i][property] === parseInt(searchTerm)) {
@@ -260,5 +261,102 @@ $(document).ready(function () {
         $("#btn-print").removeClass('disabled');
         $("#btn-register").addClass('disabled');
     }
+    
+    /////////////////////////////////////////////////////////////////////////////
+    ////////////// Invoice //////////////////////////////////////////////////////
+    $("#btn-add-invoice").click( function(){
+        // check, empty?
+        if( $("#maintenance-list").val() == ""){
+            alert("กรุณาป้อนรายการ");
+            return false;
+        }
+
+        // prepare append row.
+        var appendRow = '<tr id=' + id + '> \
+            <td style="text-align: center;">' + id + '</td> \
+            <td>' + $("#maintenance-list").val() + '</td> \
+            <td style="text-align: right;">' + $("#maintenance-price").val() + '</td> \
+            <td> \
+                <button id="btn-del-invoice"class="btn btn-danger btn-xs"> \
+                    <span class="glyphicon glyphicon-remove"></span> \
+                </button> \
+            </td></tr>';
+        $("table > tbody").append( appendRow );
+
+        // Push data into object.
+        if ($("#maintenance-list").val() != "") {
+            invoice.push({
+                row: id,
+                list: $("#maintenance-list").val(),
+                price: $("#maintenance-price").val()
+            });
+        }
+        
+        // clear text box value
+        $("#maintenance-list").val("");
+        $("#maintenance-price").val("");
+        id++;
+        
+        // Cal total
+        calTotalInvoice();
+    });
+
+    $("table#myTable").on("click", "#btn-del-invoice", function (event) {
+
+        var closestRow = $(this).closest("tr");
+
+        // remove row
+        closestRow.remove();
+
+        // calulate total
+        updateTableIndex();
+    });
+    
+    function calTotalInvoice(){
+        var total_maintenance = 0;
+
+        for(var i = 0, len = maintenance.length; i < len; i++){
+            total_maintenance += parseFloat(maintenance[i].price);
+        }
+
+        // update DOM
+        $("#invoice-total").text( total_maintenance.toFixed(2) );
+        
+        var tax = total_maintenance * 0.07;
+        $("#invoice-tax").text( tax.toFixed(2) );
+        
+        var grandTotal = total_maintenance + tax;
+        $("#invoice-grand-total").text( grandTotal );
+    };
+    
+    $("#maintenance-list").keyup( function(){
+        $("#btn-save").removeClass('disabled');
+    });
+    
+    $("#btn-save-invoice").on("click", function(event, ui){
+        $.ajax({
+             url: "index.php?r=invoice/create",
+             type: 'json', 
+             data:{
+                customer: $("#customer").val(),
+                invoice_id: $("#invoiceId").val(),
+                invoice_description: invoice
+             },
+             success: function(data){
+                 var id = $("#quotationId").val();
+                 //window.location.replace("?r=invoice/view");
+
+             }
+         });
+    });
+    
+    $("#invoiceId").keyup(function(){
+        //console.log("keyup!")
+        $("#viewInovoice").removeClass('disabled');
+    });
+    
+    $("#viewInovoice").click( function(){
+        window.location.replace("?r=invoice/view&invoice_id=" + $("#invoiceId").val() );
+    });
 });
 
