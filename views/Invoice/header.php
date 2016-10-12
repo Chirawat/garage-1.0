@@ -58,9 +58,9 @@ Modal::end();
             <div class="panel-body">
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <lable class="col-sm-2" for="customer">ชื่อลูกค้า</lable>
-                        <div class="col-sm-10">
-                            <?php if( $customer == null ): ?>
+                        <?php if( $customer == null ): ?>
+                            <lable class="col-sm-2" for="customer">ลูกค้า</lable>
+                            <div class="col-sm-10">
                                 <?= AutoComplete::widget([
                                     'id' => 'customer',
                                     'options' =>[
@@ -73,18 +73,21 @@ Modal::end();
                                         'select' => 'function(){ }',
                                     ],
                                 ]) ?>
-                            <?php else: ?>
-                                <div class="row">
-                                    <b><?= $customer->fullname ?></b>
-                                </div>
-                                <div class="row">
-                                    <?= $customer->address ?>
-                                </div>
-                                <div class="row">
-                                    <?= $customer->phone ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
+                            </div>
+                        <?php else: ?>
+                            <lable class="col-sm-4" for="customer">ลูกค้า</lable>
+                            <div class="col-sm-8">
+                                <b><?= $customer->fullname ?></b>
+                            </div>
+                            <lable class="col-sm-4" for="customer">ที่อยู่</lable>
+                            <div class="col-sm-8">
+                                <?= $customer->address ?> 
+                            </div>
+                            <lable class="col-sm-4" for="customer">เลขประจำตัวผู้เสียภาษี</lable>
+                            <div class="col-sm-8">
+                                 <?= $customer->phone ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </form>
             </div>

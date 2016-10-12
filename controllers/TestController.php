@@ -10,6 +10,7 @@ use app\models\Quotation;
 use app\models\Customer;
 use app\models\Viecle;
 use app\models\Description;
+use app\models\InvoiceDescription;
 
 class TestController extends Controller
 {
@@ -69,6 +70,17 @@ class TestController extends Controller
             $description->price = 100;
             
             $description->save();
+        }
+    }
+    
+    public function actionAddInvoiceDescription(){
+        for( $i = 1; $i <= 100; $i++ ){
+            $InvoiceDescription = new InvoiceDescription();
+            $InvoiceDescription->IID = 55;
+            $InvoiceDescription->description = "Test " . $i;
+            $InvoiceDescription->price = 100;
+            
+            $InvoiceDescription->save();
         }
     }
 }
