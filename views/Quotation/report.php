@@ -60,30 +60,33 @@ function DateThai($strDate){
     <table class="table_bordered" width="100%" border="0" cellpadding="2" cellspacing="0" style="border: 0px solid transparent;">
         <tr>
             <td width="10%" class="column-header">ลำดับ</td>
-            <td width="30%" class="column-header" colspan="2">รายการซ่อม</td>
+            <td width="25%" class="column-header">รายการซ่อม</td>
             <td width="15%" class="column-header">ราคา</td>
-            <td width="30%" class="column-header" colspan="2">รายการอะไหล่</td>
+            <td width="10%" class="column-header">ลำดับ</td>
+            <td width="25%" class="column-header">รายการอะไหล่</td>
             <td width="15%" class="column-header">ราคา</td>
         </tr>
         <?php for($i = 0; $i < $numRow; $i++):?>
         <tr>
-            <td style="text-align: center;"><?= ($i + 1) ?></td>
-            <td colspan="2" class="description"><?= isset($maintenanceDescriptionModel[$i]) ? $maintenanceDescriptionModel[$i]->description:null ?></td>
+            <td style="text-align: center;"><?= isset($maintenanceDescriptionModel[$i]) ? ($i + 1): null ?></td>
+            <td class="description"><?= isset($maintenanceDescriptionModel[$i]) ? $maintenanceDescriptionModel[$i]->description:null ?></td>
             <td class="text-right"><?= isset($maintenanceDescriptionModel[$i]) ? number_format( $maintenanceDescriptionModel[$i]->price, 2):null ?></td>
-            <td colspan="2" class="description"><?= isset($partDescriptionModel[$i]) ? $partDescriptionModel[$i]->description:null ?></td>
+            <td style="text-align: center;"><?= isset($partDescriptionModel[$i]) ? ($i + 1):null ?></td>
+            <td class="description"><?= isset($partDescriptionModel[$i]) ? $partDescriptionModel[$i]->description:null ?></td>
             <td class="text-right"><?= isset($partDescriptionModel[$i]) ? number_format( $partDescriptionModel[$i]->price, 2 ):null ?></td>
         </tr>
        <?php endfor; ?>
         <tr>
             <td class="total-cell"></td>
-            <td class="text-right" colspan="2"><b>รวมรายการซ่อม</b></td>
+            <td class="text-right"><b>รวมรายการซ่อม</b></td>
             <td class="text-right"><b><?= number_format( $sumMaintenance, 2) ?></b></td>
-            <td class="text-right" colspan="2"><b>รวมรายการอะไหล่</b></td>
+            <td class="total-cell"></td>
+            <td class="text-right"><b>รวมรายการอะไหล่</b></td>
             <td class="text-right"><b><?= number_format( $sumPart, 2 ) ?></b></td>
         </tr>
         <tr>
             <td class="total-cell" colspan="4" style="border: 0px solid transparent;"></td>
-            <td class="text-right" colspan="2"><b>รวมสุทธิ</b></td>
+            <td class="text-right"><b>รวมสุทธิ</b></td>
             <td class="text-right"><b><?= number_format( $sumMaintenance + $sumPart, 2) ?></b></td>
         </tr>
     </table>
