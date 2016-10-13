@@ -17,8 +17,8 @@ function DateThai($strDate){
 ?>
     <table width="100%">
         <tr>
-            <td width="20%">
-                <?=Html::img(Yii::getAlias('@app').'/web/img/intel_logo.png', ['width' => 100])?>
+            <td width="30%">
+                <?=Html::img(Yii::getAlias('@app').'/web/img/LOGO.jpg', ['width' => 200])?>
             </td>
             <td>
                 <h3>เจริญการช่าง</h3> <small>345 ม.3 บ้านดอนมะยาง ต.ตาดทอง อ.เมืองยโสธร จ.ยโสธร 35000<br/>

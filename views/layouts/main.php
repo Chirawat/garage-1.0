@@ -28,7 +28,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'เจริญการช่าง',
+        'brandLabel' => 'ยโสธรเจริญการช่าง',
 //        'brandUrl' => Yii::$app->homeUrl,
         'brandUrl' => Url::to(['quotation/create']),
         'options' => [
@@ -80,7 +80,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; เจริญการช่าง <?= date('Y') ?></p>
+        <p class="pull-left">&copy; ยโสธรเจริญการช่าง <?= date('Y') ?></p>
 
 <!--        <p class="pull-right"><?= Yii::powered() ?></p>-->
     </div>
